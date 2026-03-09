@@ -26,11 +26,8 @@ class RunScript:
             active_win = str(self.window_manager.get_active_window())
             target_win = self.hotkey_data.get('window', '')
             
-            # Используем 'in', так как заголовки окон в играх бывают динамическими
             if target_win in active_win:
-                # Оптимальный бинд для Сталкрафта (скрытие интерфейса)
                 hotkey = self.hotkey_data.get('action_key', 'ctrl+f1') 
-                # Нажимаем/отпускаем в зависимости от состояния ПКМ
                 if pressed:
                     print(f"Интерфейс скрыт (Статус: Прицеливание)")
                     kb.press_and_release(hotkey)
@@ -38,7 +35,6 @@ class RunScript:
                     print("Интерфейс вернут в исходное состяние.")
                     kb.press_and_release(hotkey)
             else:
-                # Чтобы не спамить в консоль при каждом клике вне игры
                 pass
 
     def toggle_script(self):

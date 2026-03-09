@@ -1,5 +1,6 @@
 {
     "window": "STALCRAFT",
     "keybind": "right",
-    "quit_hotkey": "ctrl+p"
+    "quit_hotkey": "ctrl+p",
+    "action_key": "ctrl+f1"
 }
