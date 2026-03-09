@@ -2,48 +2,36 @@ import pygetwindow as gw
 from prompt_toolkit.completion import WordCompleter
 from prompt_toolkit import prompt
 
-
 class WindowManager:
-    def __init__(self):
-        pass
-
     def get_all_windows(self):
-        windows: list = gw.getAllTitles()
-        return [window for window in windows if window.strip()]
+        # Фильтруем пустые названия и системные процессы Windows
+        ignored = ['Settings', 'Microsoft Store', 'Program Manager', 'Calculated']
+        windows = gw.getAllTitles()
+        return sorted([w for w in windows if w.strip() and w not in ignored])
 
     def get_active_window(self):
-        activeWindow = gw.getActiveWindowTitle()
-        return activeWindow
+        # Возвращаем пустую строку вместо None, чтобы не падал .split() или 'in'
+        win = gw.getActiveWindowTitle()
+        return win if win else ""
 
     def check_if_inputed_window_is_valid(self, chosen_window: str, window_list: list[str]):
-        try:
-            if chosen_window in window_list:
-                return True
-            else:
-                raise
-        
-        except Exception as error:
-            print("(!) Введенное окно - не открыто, либо не существует. Повторите попытку.")
-            return False
+        # Проверяем на вхождение (чтобы можно было выбрать "STALCRAFT" из списка)
+        if any(chosen_window == w for w in window_list):
+            return True
+        print("(!) Окно не найдено. Выберите из списка автодополнения.")
+        return False
 
     def choose_window_capture(self):
-        win_completer: list[str] = WordCompleter(self.get_all_windows(), match_middle=True, ignore_case=True, sentence=True)
+        titles = self.get_all_windows()
+        win_completer = WordCompleter(titles, match_middle=True, ignore_case=True)
+        
         while True:
-            choose_win_to_capture: str = prompt("> Введите '0' чтобы выйти из меню.\nВыберите приложение для захвата комбинации:\n>>> ", completer=win_completer)
-            if choose_win_to_capture.strip() == '0':
-                print("(>) Выходим из меню выбора окон.")
-                return
+            print("\n> Начните вводить название (Tab для списка). '0' для выхода.")
+            choice = prompt("Выберите окно: ", completer=win_completer).strip()
             
-            if self.check_if_inputed_window_is_valid(chosen_window=choose_win_to_capture, window_list=self.get_all_windows()):
-                return choose_win_to_capture
-            
-            else:
-                continue
+            if choice == '0': return None
+            if self.check_if_inputed_window_is_valid(choice, titles):
+                return choice
         
     def main(self):
-        win_to_capture: str = self.choose_window_capture()
-        return win_to_capture
-        
-if __name__ == "__main__":
-    winmanager = WindowManager()
-    winmanager.main()
+        return self.choose_window_capture()
