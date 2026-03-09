@@ -32,9 +32,7 @@ class RunScript:
                 hotkey = self.hotkey_data.get('action_key', 'f1') 
                 # Нажимаем/отпускаем в зависимости от состояния ПКМ
                 if pressed:
-                    kb.press(hotkey)
-                else:
-                    kb.release(hotkey)
+                    kb.press_and_release(hotkey)
             else:
                 # Чтобы не спамить в консоль при каждом клике вне игры
                 pass
@@ -88,3 +86,7 @@ class RunScript:
                 self.run_script()
             elif choice == "3":
                 break
+
+if __name__ == "__main__":
+    runscript = RunScript()
+    runscript.main_menu()
