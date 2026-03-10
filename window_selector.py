@@ -4,18 +4,15 @@ from prompt_toolkit import prompt
 
 class WindowManager:
     def get_all_windows(self):
-        # Фильтруем пустые названия и системные процессы Windows
         ignored = ['Settings', 'Microsoft Store', 'Program Manager', 'Calculated']
         windows = gw.getAllTitles()
         return sorted([w for w in windows if w.strip() and w not in ignored])
 
     def get_active_window(self):
-        # Возвращаем пустую строку вместо None, чтобы не падал .split() или 'in'
         win = gw.getActiveWindowTitle()
         return win if win else ""
 
     def check_if_inputed_window_is_valid(self, chosen_window: str, window_list: list[str]):
-        # Проверяем на вхождение (чтобы можно было выбрать "STALCRAFT" из списка)
         if any(chosen_window == w for w in window_list):
             return True
         print("(!) Окно не найдено. Выберите из списка автодополнения.")

@@ -34,11 +34,9 @@ class SC_KeyBinder:
         print(f"\n{label}")
         print(f"{Fore.CYAN}Нажмите сочетание, затем SPACE для сохранения...{Fore.RESET}")
         
-        # Очищаем очередь, чтобы не подхватить старые нажатия
         while kb.read_key() if kb.is_pressed('space') else False: pass
         
         recorded = kb.record(until='space')
-        # Извлекаем только уникальные клавиши «вниз», исключая служебные
         names = []
         for e in recorded:
             if e.event_type == 'down' and e.name not in ['space', 'enter', 'shift']:
@@ -55,7 +53,6 @@ class SC_KeyBinder:
         target_win = self.window_manager.main()
         if not target_win: return
 
-        # Задержка, чтобы нажатие Enter из меню не попало в бинд
         time.sleep(0.5)
         start_key = self.capture_hotkey("Привязка запуска/паузы")
         

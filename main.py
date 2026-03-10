@@ -16,7 +16,7 @@ class RunScript:
         self.hotkey_data = {}
         self.listener = None
         self.active = False
-        self.running = True # Флаг для работы цикла
+        self.running = True
 
     def on_click(self, x, y, button, pressed):
         if not self.active:
@@ -57,14 +57,12 @@ class RunScript:
         
         print(f"{Fore.GREEN}Скрипт запущен! Нажмите {start_key} для активации.")
 
-        # Запуск мыши в отдельном потоке (daemon=True чтобы не вис при выходе)
         self.listener = mouse.Listener(on_click=self.on_click)
         self.listener.daemon = True
         self.listener.start() 
 
         kb.add_hotkey(start_key, self.toggle_script)
         
-        # Вместо kb.wait используем цикл, чтобы не вешать программу
         while self.running:
             if kb.is_pressed(quit_key):
                 self.stop_script()
